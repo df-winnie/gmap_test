@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PoIItem: NSObject, GMUClusterItem {
+class POIItem: NSObject, GMUClusterItem {
     var position: CLLocationCoordinate2D
     var name: String!
     

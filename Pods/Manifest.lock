@@ -1,4 +1,5 @@
 PODS:
+  - CNPPopupController (0.3.3)
   - GoogleMaps (2.5.0):
     - GoogleMaps/Maps (= 2.5.0)
   - GoogleMaps/Base (2.5.0)
@@ -8,13 +9,15 @@ PODS:
     - GoogleMaps/Base (= 2.5.0)
 
 DEPENDENCIES:
+  - CNPPopupController
   - GoogleMaps
   - GooglePlaces
 
 SPEC CHECKSUMS:
+  CNPPopupController: 59b06290762f68beab5fb0bbfa87eb4dcbefb7de
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GooglePlaces: dd70d9d71ea1c7944846afe67de3712c99b30a77
 
-PODFILE CHECKSUM: 90ead5dd2686966a59856c749c303159f016e117
+PODFILE CHECKSUM: fb0aade523e887deda16a389b8f9d5393a69a8be
 
 COCOAPODS: 1.3.1
