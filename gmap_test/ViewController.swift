@@ -45,6 +45,13 @@ class ViewController: UIViewController {
         marker.map = mapView
     }
     
+    private func drawRoute(points:[]) {
+        
+        let path = GMSMutablePath()
+        
+    }
+    
+    // MARK: - Distance Matrix
     private func calcDistance(destLocation:CLLocation) {
 
         let clat = String(describing: currentLocation.coordinate.latitude)
@@ -104,7 +111,6 @@ class ViewController: UIViewController {
     }
     
     @objc func showPopup(dAdd:String,dist:String,dur:String) {
-        
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping

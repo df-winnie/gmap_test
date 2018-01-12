@@ -8,6 +8,7 @@ target 'gmap_test' do
   # Pods for gmap_test
 pod 'GoogleMaps'
 pod 'GooglePlaces'
+
 pod 'CNPPopupController'
 
 end
