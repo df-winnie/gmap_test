@@ -10,13 +10,15 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 import CNPPopupController
+import SwiftyJSON
 
 class ViewController: UIViewController {
 
     private var mapView:GMSMapView!
     private var locationManager = CLLocationManager()
     private var clusterManager:GMUClusterManager!
-
+    private var polyline:GMSPolyline!
+    
     let kClusterItemCount = 10
     let kCameraLatitude = 24.1469
     let kCameraLongitude = 120.6839
@@ -45,22 +47,88 @@ class ViewController: UIViewController {
         marker.map = mapView
     }
     
-    private func drawRoute(points:[]) {
+    // MARK: Directions/Shapes
+    private func calcRoute(endLctn:CLLocationCoordinate2D) {
         
+        let slat = String(describing: currentLocation.coordinate.latitude)
+        let slng = String(describing: currentLocation.coordinate.longitude)
+        
+        let elat = String(describing: endLctn.latitude)
+        let elng = String(describing: endLctn.longitude)
+        
+        let url = URL(string: "https://maps.googleapis.com/maps/api/directions/json?units=metric&language=zh-TW&origin=\(slat),\(slng)&destination=\(elat),\(elng)&key=AIzaSyCsdQewjR0Om5JkvQSQiUMaRnrryNT_Fh0")
+        
+        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            
+            if error == nil && data != nil {
+                
+                do {
+                    let json = try JSON(data: data!)
+                    let steps = json["routes"][0]["legs"][0]["steps"].arrayValue
+                    
+                    var waypoints = [CLLocationCoordinate2D]()
+                    for index in 0...steps.count-1 {
+                        
+                        if index == 0 {
+                            let slat = CLLocationDegrees(steps[index]["start_location"]["lat"].doubleValue)
+                            let slng = CLLocationDegrees(steps[index]["start_location"]["lng"].doubleValue)
+                            let point = CLLocationCoordinate2D(latitude: slat, longitude: slng)
+                            waypoints.append(point)
+                        }
+                        
+                        let elat = CLLocationDegrees(steps[index]["end_location"]["lat"].doubleValue)
+                        let elng = CLLocationDegrees(steps[index]["end_location"]["lng"].doubleValue)
+                        let point = CLLocationCoordinate2D(latitude: elat, longitude: elng)
+                        waypoints.append(point)
+                    }
+                    print(steps.count, waypoints.count)
+                    
+                    DispatchQueue.main.async {
+                        self.drawRoute(waypoints: waypoints)
+                    }
+                    
+                } catch {
+                    print(error)
+                }
+              
+            } else if let err = error {
+                print(err.localizedDescription)
+            } else {
+                print("???")
+            }
+        }
+        
+        task.resume()
+    }
+    
+    private func drawRoute(waypoints:[CLLocationCoordinate2D]) {
+    
         let path = GMSMutablePath()
-        
+        for waypoint in waypoints {
+            path.add(waypoint)
+        }
+        if polyline != nil {
+            self.polyline.map = nil
+            self.polyline = nil
+
+        }
+        self.polyline = GMSPolyline(path: path)
+        self.polyline.strokeWidth = 3
+        self.polyline.geodesic = true
+        self.polyline.map = mapView
+
     }
     
     // MARK: - Distance Matrix
-    private func calcDistance(destLocation:CLLocation) {
+    private func calcDistance(endLctn:CLLocationCoordinate2D) {
 
-        let clat = String(describing: currentLocation.coordinate.latitude)
-        let clng = String(describing: currentLocation.coordinate.longitude)
+        let slat = String(describing: currentLocation.coordinate.latitude)
+        let slng = String(describing: currentLocation.coordinate.longitude)
         
-        let dlat = String(describing: destLocation.coordinate.latitude)
-        let dlng = String(describing: destLocation.coordinate.longitude)
+        let elat = String(describing: endLctn.latitude)
+        let elng = String(describing: endLctn.longitude)
         
-        let url = URL(string: "https://maps.googleapis.com/maps/api/distancematrix/json?language=zh-TW&origins=\(clat),\(clng)&destinations=\(dlat),\(dlng)&key=AIzaSyCsdQewjR0Om5JkvQSQiUMaRnrryNT_Fh0") // units=metric
+        let url = URL(string: "https://maps.googleapis.com/maps/api/distancematrix/json?language=zh-TW&origins=\(slat),\(slng)&destinations=\(elat),\(elng)&key=AIzaSyCsdQewjR0Om5JkvQSQiUMaRnrryNT_Fh0") // units=metric
         
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
             
@@ -269,7 +337,8 @@ extension ViewController {
         locationManager.startUpdatingLocation()
         
         view.addSubview(mapView)
- 
+        
+        
         WebService.bikeSites(urlStr: "http://data.taichung.gov.tw/wSite/public/data/f1501559780355.json") { (list, error) in
 
             DispatchQueue.main.async {
@@ -331,7 +400,9 @@ extension ViewController:GMSMapViewDelegate {
             NSLog("Did tap marker for cluster item \(poiItem.name)")
             print("TAPPED LOCATION",poiItem.position)
 //            self.showPopup(destLocation: CLLocation(latitude: poiItem.position.latitude, longitude: poiItem.position.longitude))
-            self.calcDistance(destLocation: CLLocation(latitude: poiItem.position.latitude, longitude: poiItem.position.longitude))
+            self.calcRoute(endLctn: poiItem.position)
+            self.calcDistance(endLctn: poiItem.position)
+
         } else {
             // tap on cluster marker
             NSLog("Did tap a normal marker")

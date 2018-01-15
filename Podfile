@@ -9,6 +9,7 @@ target 'gmap_test' do
 pod 'GoogleMaps'
 pod 'GooglePlaces'
 
+pod 'SwiftyJSON'
 pod 'CNPPopupController'
 
 end
