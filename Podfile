@@ -11,5 +11,6 @@ pod 'GooglePlaces'
 
 pod 'SwiftyJSON'
 pod 'CNPPopupController'
+pod 'Presentr'
 
 end

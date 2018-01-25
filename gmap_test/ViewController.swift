@@ -9,7 +9,7 @@
 import UIKit
 import GoogleMaps
 import GooglePlaces
-import CNPPopupController
+//import CNPPopupController
 import SwiftyJSON
 
 class ViewController: UIViewController {
@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     let kCameraLatitude = 24.1469
     let kCameraLongitude = 120.6839
     
-    var popupController:CNPPopupController?
+//    var popupController:CNPPopupController?
     
     private var currentLocation:CLLocation!
     
@@ -161,9 +161,9 @@ class ViewController: UIViewController {
                                     return
                             }
                             
-                            DispatchQueue.main.async {
-                                self.showPopup(dAdd: dAdd, dist: dist, dur: dur)
-                            }
+//                            DispatchQueue.main.async {
+//                                self.showPopup(dAdd: dAdd, dist: dist, dur: dur)
+//                            }
                         }
                     }
                 }  catch let error as NSError {
@@ -177,7 +177,7 @@ class ViewController: UIViewController {
         task.resume()
         
     }
-    
+/*
     @objc func showPopup(dAdd:String,dist:String,dur:String) {
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -238,7 +238,7 @@ class ViewController: UIViewController {
         popupController.present(animated: true)
         
     }
-    
+*/
     // MARK: - Clustering
     func clustering(sites:[bikeSite]) {
         
@@ -415,6 +415,7 @@ extension ViewController:GMSMapViewDelegate {
     
 }
 
+/*
 //MARK:CNPPopupControllerDelegate
 extension ViewController : CNPPopupControllerDelegate {
     
@@ -427,4 +428,4 @@ extension ViewController : CNPPopupControllerDelegate {
     }
     
 }
-
+*/

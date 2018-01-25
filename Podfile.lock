@@ -7,20 +7,23 @@ PODS:
     - GoogleMaps/Base
   - GooglePlaces (2.5.0):
     - GoogleMaps/Base (= 2.5.0)
+  - Presentr (1.3)
   - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
   - CNPPopupController
   - GoogleMaps
   - GooglePlaces
+  - Presentr
   - SwiftyJSON
 
 SPEC CHECKSUMS:
   CNPPopupController: 59b06290762f68beab5fb0bbfa87eb4dcbefb7de
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GooglePlaces: dd70d9d71ea1c7944846afe67de3712c99b30a77
+  Presentr: 3f0825a42cb32ecd8fc6b6d0b0de87d7d0b42482
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 4236786cfda59d0f4f7f5b6dc5383169fb1fffd3
+PODFILE CHECKSUM: 4595601afe49068408562f555212080cccf0bff0
 
 COCOAPODS: 1.3.1
